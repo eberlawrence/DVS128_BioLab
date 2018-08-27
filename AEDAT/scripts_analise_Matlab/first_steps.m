@@ -7,7 +7,9 @@ DVS128
 
 
 %}
-addpath('C:/Users/Samsung/Documents/ObjectRecognition/AEDAT_Ferramentas/AedatTools/Matlab/');
+clc;
+clear all;
+addpath('C:/Users/Samsung/Documents/toolsAEDAT/AedatTools/Matlab/');
 %% Carregar o vídeo
 
 fileCelular = {};
@@ -32,24 +34,14 @@ numFrames = deltaT/timeStep;
 frameTimes = to + timeStep*0.5 : timeStep : tf;
 frameBoundaryTimes = [to frameTimes + timeStep * 0.5];
 numEvents = length(t);
-
-frameProMediado = zeros([AEDAT.info.deviceAddressSpace(2) ...
-        AEDAT.info.deviceAddressSpace(1) ...
-        1], 'double');
     
 frame = zeros([AEDAT.info.deviceAddressSpace(2) ...
             AEDAT.info.deviceAddressSpace(1) ...
             1]);
 frame = frame + 0.5;
 
-frames = {zeros(128,128),numFrames};
+frames = {zeros(128,128)};
        
-arrayOfPoints = zeros([AEDAT.info.deviceAddressSpace(2) ...
-            AEDAT.info.deviceAddressSpace(1) ...
-            1], ...
-           'uint8');
-       
-auxArray = 0;
 
 for frameIndex = 1:numFrames
     
@@ -69,50 +61,37 @@ for frameIndex = 1:numFrames
         frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) = frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) + eventsForFrame.polarity(i) - 0.5;  
     end
             
+    coordenadas(:,:) = {[eventsForFrame.x(:,1)+1,eventsForFrame.y(:,1)+1]};
+    
+    m = mode(coordenadas{1});
+    IndexP1.x = find((eventsForFrame.x(:,1)+1) == m(1,1));
+    for i = 1:length(IndexP1.x)
+        posyP1(i) = eventsForFrame.y(IndexP1.x(i),1)+1;
+    end
+    IndexP1.y = max(posyP1(i));
+    P1.x = m(1,1);
+    P1.y = IndexP1.y(end);
+    
+    IndexP2.y = find((eventsForFrame.y(:,1)+1) == m(1,2));
+    for i = 1:length(IndexP2.y)
+        posxP2(i) = eventsForFrame.x(IndexP2.y(i),1)+1;
+    end
+    IndexP2.x = max(posxP2(i));
+    P2.y = m(1,1);
+    P2.x = IndexP2.x(end);
+    
+   frame(P2.x:P1.x,P1.y:P2.y) = 0;
+   
     figure();
     imshow(frame);
-    
+  
     frame = zeros([AEDAT.info.deviceAddressSpace(2) ...
             AEDAT.info.deviceAddressSpace(1) ...
             1]);
+        
     frame = frame + 0.5;
 
-     frames{:,frameIndex} = frame;
-%     frames(:, :, frameIndex) = accumarray([eventsForFrame.y eventsForFrame.x] + 1, eventsForFrame.polarity*2-1);
-%     if(frameIndex == 7)
-%         break;
-%     end
-end 
-contrast = 3;
-frameAux = squeeze(frame);
-figure();
-hold all;
-image(frameAux-1); 
-hold on;
-colormap(redgreencmap(contrast * 2 + 1));
-hold on;
-axis equal tight;
+     frames = cat(4,frames,frame);
 
-% frameMolde = {zeros(128,128),numFrames};
-% for i = 1:48
-%     frameMolde{:,i} = zeros(128,128);
-% end
-% for i = 1:length(frames)
-%     for j =1:size(frames{i},1)
-%         for k = 1:size(frames{i},2)
-%             frameMolde{1,i}(j,k) = frameMolde{1,i}(j,k) + frames{1,i}(j,k);
-%         end
-%     end
-% end
-% 
-% implay(frameMolde,5);
-% 
-%     
-% contrast = 3;
-% frame(frame > contrast) = contrast;
-% frame(frame < - contrast) = -contrast;
-% frame = uint8(frame + contrast + 1);
-% 
-% 
-% 
+end 
  i=1;
