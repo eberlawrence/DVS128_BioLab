@@ -9,6 +9,7 @@ DVS128
 %}
 clc;
 clear all;
+close all;
 addpath('C:/Users/Samsung/Documents/toolsAEDAT/AedatTools/Matlab/');
 addpath('FramesFunctions/');
 %% Carregar o vídeo
@@ -32,6 +33,6 @@ tf = max(AEDAT.data.polarity.timeStamp);
 deltaT = (tf - to); 
 timeStep = 100000; %100000us
 
-frames = GetFramesTimeSpaced(AEDAT,timeStep);
-
+frames = GetFramesTimeSpacedModifiedTestVersionm(AEDAT,timeStep);
+%frames = GetFramesTimeSpaced(AEDAT,timeStep);
  i=1;

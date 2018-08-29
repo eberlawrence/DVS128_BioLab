@@ -1,4 +1,4 @@
-function [ frames ] = GetFramesTimeSpaced( AEDAT, timeStep )
+function [ frames ] = GetFramesTimeSpacedModifiedTestVersionm( AEDAT, timeStep )
 %{
 This function get the AEDAT file and a value of time (us) and return the
 frames who was formed by the sum of the spikes along th timeStamp (sorry my
@@ -37,9 +37,14 @@ for frameIndex = 1:numFrames
     eventsForFrame.y = AEDAT.data.polarity.y(selectedLogical);
     eventsForFrame.polarity = AEDAT.data.polarity.polarity(selectedLogical)-0.5;
     
+    xposf = medfilt1(double(eventsForFrame.x),5);
+    xposf = medfilt1(xposf);
+    yposf = medfilt1(double(eventsForFrame.y),5);
+    yposf = medfilt1(yposf);
+    pol =  medfilt1(double(eventsForFrame.polarity),5);
     for i=1:length(eventsForFrame.x)
 %         if(frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) == 0)
-              frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) = frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) + eventsForFrame.polarity(i);  
+              frame(xposf(i,1)+1,yposf(i,1)+1) = frame(xposf(i,1)+1,yposf(i,1)+1) + pol(i);  
 %         end
     end
             
@@ -47,7 +52,8 @@ for frameIndex = 1:numFrames
 %     
 %     m = mode(coordenadas{1});
 %         
-%     h = histogram(eventsForFrame.x,25);
+%     h = histogram(eventsForFrame.polarity);
+%     f = histogram(frame);
 %     h.Normalization = 'countdensity';
 %     valores = h.Data;
 %     
@@ -73,8 +79,21 @@ for frameIndex = 1:numFrames
 %     
 %    frame(P2.x:P1.x,P1.y:P2.y) = 0;
 %    
+
+    
+    [x,y] = find(frame > 1);
+    for j = 1:length(x)
+        frame(x(j,1),y(j,1)) = 1;
+    end
+   
+    [x,y] = find(frame < 0);
+    for j = 1:length(x)
+        frame(x(j,1),y(j,1)) = 0;
+    end
+    
     figure();
     imshow(frame);
+
   
     frame = zeros([AEDAT.info.deviceAddressSpace(2) ...
             AEDAT.info.deviceAddressSpace(1) ...
