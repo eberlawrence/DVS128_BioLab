@@ -38,10 +38,11 @@ for frameIndex = 1:numFrames
     eventsForFrame.y = AEDAT.data.polarity.y(selectedLogical);
     eventsForFrame.polarity = AEDAT.data.polarity.polarity(selectedLogical)-0.5;
     
-    xposf = medfilt1(double(eventsForFrame.x),10);
-    yposf = medfilt1(double(eventsForFrame.y),10);
+    xposf = medfilt1(double(eventsForFrame.x),70);
+    yposf = medfilt1(double(eventsForFrame.y),70);
     xposf = uint8(xposf);
     yposf = uint8(yposf);
+    
     for i=1:length(eventsForFrame.x)
        frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) =...
            frame(eventsForFrame.x(i,1)+1,eventsForFrame.y(i,1)+1) +...
@@ -53,11 +54,11 @@ for frameIndex = 1:numFrames
         Hy = horzcat(Hy,length(yposf(yposf==z)));
     end
     
-    limiar.x = uint32(0.001*length(xposf));    
+    limiar.x = uint32(0.025*length(xposf));    
     TrackingBox_P1.x = find(Hx>=limiar.x,1, 'first');
     TrackingBox_P2.x = find(Hx>=limiar.x,1, 'last');
     
-    limiar.y = uint32(0.001*length(yposf));
+    limiar.y = uint32(0.025*length(yposf));
     TrackingBox_P1.y =  find(Hy>=limiar.y,1, 'first');
     TrackingBox_P2.y =  find(Hy>=limiar.y,1, 'last');
     

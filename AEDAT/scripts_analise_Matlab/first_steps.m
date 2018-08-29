@@ -23,7 +23,7 @@ source = {'C:/Users/Samsung/Documents/DVS128_BioLab/assets/video_celular.aedat'.
     ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/TrackingCopo.aedat'...
     ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/pendulo.aedat'...
     ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/pendulo2.aedat'};
-fileCelular.importParams.filePath = source{2};
+fileCelular.importParams.filePath = source{5};
 fileCelular.importParams.source = 'Dvs128';
 AEDAT = ImportAedat(fileCelular);
 %% Testes para platagem com funções prontas
