@@ -12,14 +12,18 @@ clear all;
 close all;
 addpath('C:/Users/Samsung/Documents/toolsAEDAT/AedatTools/Matlab/');
 addpath('FramesFunctions/');
+addpath('TrackingFunctions/');
 %% Carregar o vídeo
 
 fileCelular = {};
 fileCelular.importParams = {};
-source = {'C:/Users/Samsung/Documents/ObjectRecognition/assets/video_celular.aedat'...
-    ,'C:/Users/Samsung/Documents/ObjectRecognition/assets/video_chave_fenda.aedat'...
-    ,'C:/Users/Samsung/Documents/ObjectRecognition/assets/mao_invisivel_do_capitalismo.aedat'};
-fileCelular.importParams.filePath = source{1};
+source = {'C:/Users/Samsung/Documents/DVS128_BioLab/assets/video_celular.aedat'...
+    ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/video_chave_fenda.aedat'...
+    ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/mao_invisivel_do_capitalismo.aedat'...
+    ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/TrackingCopo.aedat'...
+    ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/pendulo.aedat'...
+    ,'C:/Users/Samsung/Documents/DVS128_BioLab/assets/pendulo2.aedat'};
+fileCelular.importParams.filePath = source{2};
 fileCelular.importParams.source = 'Dvs128';
 AEDAT = ImportAedat(fileCelular);
 %% Testes para platagem com funções prontas
@@ -33,6 +37,6 @@ tf = max(AEDAT.data.polarity.timeStamp);
 deltaT = (tf - to); 
 timeStep = 100000; %100000us
 
-frames = GetFramesTimeSpacedModifiedTestVersionm(AEDAT,timeStep);
-%frames = GetFramesTimeSpaced(AEDAT,timeStep);
+%frames = GetFramesTimeSpacedModifiedTestVersionm(AEDAT,timeStep);
+MedianTracker(AEDAT,timeStep);
  i=1;
