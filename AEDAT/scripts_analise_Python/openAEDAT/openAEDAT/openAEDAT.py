@@ -1,9 +1,7 @@
-# -*- encoding: utf-8 -*-
 import struct
 import os
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.image as im
+from matplotlib import pyplot as plt, image as im
 import pandas as pd
 from scipy import ndimage, signal, ndimage
 import sys
@@ -175,7 +173,101 @@ def bounding_boxe(x=X,y=Y, e_ini=0, e_fin=1000, m=0.01):
     return np.array(P1), np.array(P2)
 
 
-def create_images(fps=10, t=T, x=X, y=Y, p=P):
+def particula(x=X, y=Y, e_ini=0, e_fin=1000, limiar=30):
+    x = X[e_ini:e_fin].copy()
+    y = Y[e_ini:e_fin].copy()
+    xy1 = list(zip(x,y))
+    xy2 = xy1.copy()
+    lc = []
+    listaDif = lambda a,b: True if len(set(a) - set(b)) != len(set(a)) else False 
+    while len(xy2) > 0:
+        l = []
+        e = xy2[0]
+        l.append(e)
+        xy2.remove(xy2[0])
+        p1, p2, p3, p4, p6, p7, p8, p9 = (e[0]-1, e[1]-1), (e[0]-1, e[1]  ), (e[0]-1, e[1]+1), \
+                                         (e[0]  , e[1]-1),                   (e[0]  , e[1]+1), \
+                                         (e[0]+1, e[1]-1), (e[0]+1, e[1]  ), (e[0]+1, e[1]+1)
+        if p1 in xy1:
+            try:            xy2.remove(p1)
+            except: pass
+            l.append(p1)
+        if p2 in xy1:
+            try:            xy2.remove(p2)
+            except: pass
+            l.append(p2)
+        if p3 in xy1: 
+            try:            xy2.remove(p3)
+            except: pass
+            l.append(p3)
+        if p4 in xy1: 
+            try:            xy2.remove(p4)
+            except: pass
+            l.append(p4)
+        if p6 in xy1: 
+            try:            xy2.remove(p6)
+            except: pass
+            l.append(p6)
+        if p7 in xy1: 
+            try:            xy2.remove(p7)
+            except: pass
+            l.append(p7)
+        if p8 in xy1: 
+            try:            xy2.remove(p8)
+            except: pass
+            l.append(p8)
+        if p9 in xy1: 
+            try:            xy2.remove(p9)
+            except: pass
+            l.append(p9)
+        lc.append(l)
+
+    flag = False
+    i, j = 0, 1
+    lp = lc.copy()
+
+    while i < len(lp):    
+        if j < len(lp):
+            if  j != i:
+                if listaDif(lp[i],lp[j]) == True:
+                    lp[i].extend(lp[j])
+                    lp[i] = list(set(lp[i]))
+                    lp.remove(lp[j])
+                    if j < i:   i -= 1
+                else:
+                    j += 1
+            else:
+                j += 1
+        else:
+            i += 1
+            j = 0
+    m = []
+    for i in range(len(lp)):
+        lp[i] = list(set(lp[i]))
+        m.append(len(lp[i]))
+    part = list(zip(m,lp))
+    part2 = []
+    for i in range(len(part)):
+        if part[i][0] >= limiar:
+            part2.append(part[i])
+
+    centro = []
+    pMax, pMin = [], []
+    for i in part2:
+        p1, p2 = [], []
+        cX, cY = 0, 0
+        for j in i[1]:
+            p1.append(j[0])
+            p2.append(j[1])
+        cX, cY = sum(p1)/i[0], sum(p2)/i[0]   
+        centro.append((cX,cY))
+        pMax.append((max(p1), max(p2)))
+        pMin.append((min(p1), min(p2)))
+
+    return centro, pMax, pMin
+
+
+def create_images(fps=50, t=T, x=X, y=Y, p=P, lim='part'):
     '''
     Divide a quantidade de eventos totais em varias imagens. Salva as imagens na pasta imagens.
     '''
@@ -186,13 +278,21 @@ def create_images(fps=10, t=T, x=X, y=Y, p=P):
     frame = 0
     while frame < frames:
         m = matrix_active(x, y, p, i, f, matrixType=1)
-        
-        p1, p2 = bounding_boxe(e_ini=i, e_fin=f, m=0.025)
         im.imsave('imagens\\img'+str(frame)+'.png', m, cmap='gray')
         image = Image.open('imagens\\img'+str(frame)+'.png')
         draw = ImageDraw.Draw(image)
-        draw.rectangle([p1[0],p1[1], p2[0], p2[1]], outline=(255,0,0,255))
-        image = ndimage.rotate(image,180)
+
+        if lim == 'part':
+            c, pMax, pMin = particula(e_ini=i, e_fin=f)
+            for j in range(len(c)):
+                draw.ellipse([pMin[j][0], pMin[j][1], pMax[j][0],pMax[j][1]], 
+                             outline=(np.random.choice(255),np.random.choice(255),np.random.choice(255)))
+                             
+        elif lim == 'hist':
+            p1, p2 = bounding_boxe(e_ini=i, e_fin=f, m=0.025)
+            draw.rectangle([p1[0],p1[1], p2[0], p2[1]], outline=(255,0,0,255))
+        
+        #image = ndimage.rotate(image,180)
         im.imsave('imagens\\img'+str(frame)+'.png', image)
         i += events
         f += events
