@@ -38,8 +38,8 @@ for frameIndex = 1:numFrames
     eventsForFrame.y = AEDAT.data.polarity.y(selectedLogical);
     eventsForFrame.polarity = AEDAT.data.polarity.polarity(selectedLogical)-0.5;
     
-    xposf = medfilt1(double(eventsForFrame.x),70);
-    yposf = medfilt1(double(eventsForFrame.y),70);
+    xposf = medfilt1(double(eventsForFrame.x),2);
+    yposf = medfilt1(double(eventsForFrame.y),2);
     xposf = uint8(xposf);
     yposf = uint8(yposf);
     
