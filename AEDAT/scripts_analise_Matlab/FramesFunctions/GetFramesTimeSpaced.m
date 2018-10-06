@@ -23,7 +23,7 @@ frame = frame + 0.5;
 
 frames = {zeros(128,128)};
        
-
+figure();
 for frameIndex = 1:numFrames
     
     firstIndex = find(t >= frameBoundaryTimes(frameIndex), 1, 'first');
@@ -46,7 +46,7 @@ for frameIndex = 1:numFrames
     
    
  
-    figure();
+     frame = imrotate(frame,90);
     imshow(frame);
   
    frame = zeros([xdim,ydim,1]);
