@@ -18,7 +18,6 @@ frame = zeros([xdim,ydim,1])+ 0.5;
 frames = {zeros(xdim,ydim)};
 if(strcmp(boolean,'true'))
     figure();
-end
 for frameIndex = 1:numFrames
     
     firstIndex = find(t >= frameBoundaryTimes(frameIndex), 1, 'first');
@@ -43,15 +42,9 @@ for frameIndex = 1:numFrames
 
    frame = imrotate(frame,90);
    
-   if(strcmp(boolean,'true'))
-       imshow(frame);
-   end
-   
    frames = cat(4,frames,frame);
    
    frame = zeros([xdim,ydim,1]) + 0.5;
-   
-   
 end 
 end
 

@@ -4,22 +4,15 @@ This function get the AEDAT file and a value of time (us) and return the
 frames who was formed by the sum of the spikes along the timeStamp and put 
 rectangule in the region with more variance (sorry my english)
 %}
-t = AEDAT.data.polarity.timeStamp;
-to = min(AEDAT.data.polarity.timeStamp); 
-tf = max(AEDAT.data.polarity.timeStamp); 
-deltaT = (tf - to); 
 
-numFrames = deltaT/timeStep;
-frameTimes = to + timeStep*0.5 : timeStep : tf;
-frameBoundaryTimes = [to frameTimes + timeStep * 0.5];
-numEvents = length(t);
+[ t,to,tf,deltaT ] = GetTimeInformation( AEDAT );
 
-frame = zeros([AEDAT.info.deviceAddressSpace(2) ...
-            AEDAT.info.deviceAddressSpace(1) ...
-            1]);
-        
-frame = frame + 0.5;
+[ xdim, ydim ] = DimensaoImagens( AEDAT );
 
+[ numFrames,frameBoundaryTimes,numEvents ] = ...
+    GetGeneralFrameInformation( AEDAT,timeStep );
+
+frame = zeros([xdim, ydim, 1]) + 0.5;
        
 Hx = [];
 Hy = [];
