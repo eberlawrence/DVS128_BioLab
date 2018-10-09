@@ -15,6 +15,7 @@ addpath('FramesFunctions/');
 addpath('TrackingFunctions/');
 addpath('Common/');
 addpath('+json/');
+pathData = '';
 %% Carregar o vídeo
 
 fileCelular = {};
@@ -49,6 +50,19 @@ AEDAT = ImportAedat(fileCelular);
 %timeStep = 2000; % 2000 us / 2 ms
 %timeStep = 10000; % 10000us / 10 ms
 timeStep = 50000; % 50000us / 50 ms
+%% Rotular dados
+qtdeImagens = 16/timeStep;
+frames = GetFramesTimeSpaced(AEDAT,timeStep,'false');
+for i = 1:qtdeImagens
+    data = struct('data',frames{i},'label','celular');
+    json.write(data, 'celular_'+ i +'.json');
+end
+figure();
+imshow(x.data);
+title('json');
+figure();
+imshow(frames{2});
+title('original');
 
 %%
 GetFramesTimeSpaced(AEDAT,timeStep,'true');
