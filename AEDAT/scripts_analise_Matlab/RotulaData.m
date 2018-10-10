@@ -15,11 +15,11 @@ addpath('FramesFunctions/');
 addpath('TrackingFunctions/');
 addpath('Common/');
 addpath('+json/');
-pathSaveData = 'C:/Users/Samsung/Documents/DVS128_BioLab/NeuromorphicObjectDataSet/';
+pathSaveData = 'C:/Users/Samsung/Documents/DVS128_BioLab/NeuromorphicObjectDataSet/tesoura/';
 %% Carregar o vídeo
 
-fileCelular = {};
-fileCelular.importParams = {};
+file = {};
+file.importParams = {};
 source = {'video_celular.aedat'...1
     ,'video_chave_fenda.aedat'...2
     ,'mao_invisivel_do_capitalismo.aedat'...3
@@ -34,13 +34,18 @@ source = {'video_celular.aedat'...1
     ,'Grampeador.aedat'...12
     ,'Tesoura.aedat'...13
     ,'Caneca.aedat'};%14
-fileCelular.importParams.filePath = source{9};
-fileCelular.importParams.source = 'Dvs128';
-AEDAT = ImportAedat(fileCelular);
+file.importParams.filePath = source{13};
+file.importParams.source = 'Dvs128';
+AEDAT = ImportAedat(file);
 %% Extração de dados (frames)
 [ t,to,tf,deltaT ] = GetTimeInformation( AEDAT );
 
 timeStep = 50000; % 50000us / 50 ms
 %% Rotular dados
 
-RotularDados(AEDAT,'label',pathSaveData,timeStep);
+RotularDados(AEDAT,'tesoura',pathSaveData,timeStep);
+
+%% Validar Rotulação
+
+RotulacaoValidator(timeStep,'tesoura',pathSaveData);
+

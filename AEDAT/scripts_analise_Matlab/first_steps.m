@@ -33,7 +33,7 @@ source = {'video_celular.aedat'...1
     ,'Grampeador.aedat'...12
     ,'Tesoura.aedat'...13
     ,'Caneca.aedat'};%14
-fileCelular.importParams.filePath = source{9};
+fileCelular.importParams.filePath = source{12};
 fileCelular.importParams.source = 'Dvs128';
 AEDAT = ImportAedat(fileCelular);
 %% Testes para platagem com funções prontas
@@ -51,7 +51,7 @@ AEDAT = ImportAedat(fileCelular);
 timeStep = 50000; % 50000us / 50 ms
 
 %%
-GetFramesTimeSpaced(AEDAT,timeStep,'true');
-%MedianTracker(AEDAT,timeStep);
+%GetFramesTimeSpaced(AEDAT,timeStep,'true');
+MedianTracker(AEDAT,timeStep);
 %ParticleTracker(AEDAT,timeStep);
  i=1;

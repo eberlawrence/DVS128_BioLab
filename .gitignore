@@ -331,4 +331,4 @@ ASALocalRun/
 
 # MATLAB scripts 
 .asv
-NeuromorphicObjectDataSet/
+#NeuromorphicObjectDataSet/
