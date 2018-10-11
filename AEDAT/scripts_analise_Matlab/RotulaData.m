@@ -15,7 +15,7 @@ addpath('FramesFunctions/');
 addpath('TrackingFunctions/');
 addpath('Common/');
 addpath('+json/');
-pathSaveData = 'C:/Users/Samsung/Documents/DVS128_BioLab/NeuromorphicObjectDataSet/tesoura/';
+pathSaveData = 'C:/Users/Samsung/Documents/DVS128_BioLab/NeuromorphicObjectDataSet/caixa/';
 %% Carregar o vídeo
 
 file = {};
@@ -34,7 +34,7 @@ source = {'video_celular.aedat'...1
     ,'Grampeador.aedat'...12
     ,'Tesoura.aedat'...13
     ,'Caneca.aedat'};%14
-file.importParams.filePath = source{13};
+file.importParams.filePath = source{7};
 file.importParams.source = 'Dvs128';
 AEDAT = ImportAedat(file);
 %% Extração de dados (frames)
@@ -43,9 +43,9 @@ AEDAT = ImportAedat(file);
 timeStep = 50000; % 50000us / 50 ms
 %% Rotular dados
 
-RotularDados(AEDAT,'tesoura',pathSaveData,timeStep);
+RotularDados(AEDAT,'caixa',pathSaveData,timeStep);
 
 %% Validar Rotulação
 
-RotulacaoValidator(timeStep,'tesoura',pathSaveData);
+RotulacaoValidator(timeStep,'caixa',pathSaveData);
 
