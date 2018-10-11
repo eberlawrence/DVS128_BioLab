@@ -7,7 +7,7 @@ Esse repositório consiste em scripts e estudos desenvolvidos no Laboratório de
 
 ### Conteúdo
 
-- Database neuromórfico para reconhecimento de objeto [Database neuromórfico para reconhecimento de objeto]: [https://github.com/eduardoborgesgouveia/DVS128_BioLab/tree/master/NeuromorphicObjectDataSet];  
+- [Database neuromórfico para reconhecimento de objeto](https://github.com/eduardoborgesgouveia/DVS128_BioLab/tree/master/NeuromorphicObjectDataSet);  
 - [Scripts em Matlab para processamento de dados neuromórficos] [Scripts em Matlab para processamento de dados neuromórficos]:[https://github.com/eduardoborgesgouveia/DVS128_BioLab/tree/master/AEDAT/scripts_analise_Matlab];  
 - [Scripts em Python para processamento de dados neuromórficos] [Scripts em Python para processamento de dados neuromórficos]:[https://github.com/eduardoborgesgouveia/DVS128_BioLab/tree/master/AEDAT/scripts_analise_Python/openAEDAT];  
 - [Papers relacionados a visão neuromórfica] [Papers relacionados a visão neuromórfica]:[https://github.com/eduardoborgesgouveia/DVS128_BioLab/tree/master/Bibliografia];  
