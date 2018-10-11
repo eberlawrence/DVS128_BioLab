@@ -1,29 +1,24 @@
-function [ frames ] = GetFramesTimeSpaced( AEDAT, timeStep )
+function [ frames ] = GetFramesTimeSpaced( AEDAT, timeStep, boolean )
 %{
 This function get the AEDAT file and a value of time (us) and return the
 frames who was formed by the sum of the spikes along th timeStamp (sorry my
 english)
 %}
-t = AEDAT.data.polarity.timeStamp;
-to = min(AEDAT.data.polarity.timeStamp); 
-tf = max(AEDAT.data.polarity.timeStamp); 
-deltaT = (tf - to); 
 
-xdim = AEDAT.info.deviceAddressSpace(2);
-ydim = AEDAT.info.deviceAddressSpace(1);
+[ t,to,tf,deltaT ] = GetTimeInformation( AEDAT );
 
-numFrames = deltaT/timeStep;
-frameTimes = to + timeStep*0.5 : timeStep : tf;
-frameBoundaryTimes = [to frameTimes + timeStep * 0.5];
-numEvents = length(t);
+[ xdim, ydim ] = DimensaoImagens( AEDAT );
 
-frame = zeros([xdim,ydim,1]);
-        
-frame = frame + 0.5;
+[ numFrames,frameBoundaryTimes,numEvents ] = ...
+    GetGeneralFrameInformation( AEDAT,timeStep );
 
-frames = {zeros(128,128)};
-       
 
+
+frame = zeros([xdim,ydim,1])+ 0.5;
+frames = {zeros(xdim,ydim)};
+if(strcmp(boolean,'true'))
+    figure();
+end
 for frameIndex = 1:numFrames
     
     firstIndex = find(t >= frameBoundaryTimes(frameIndex), 1, 'first');
@@ -45,16 +40,18 @@ for frameIndex = 1:numFrames
     end
     
    
- 
-    figure();
-    imshow(frame);
-  
-   frame = zeros([xdim,ydim,1]);
-        
-   frame = frame + 0.5;
 
+   frame = imrotate(frame,90);
+   
+   if(strcmp(boolean,'true'))
+       imshow(frame);
+   end
+   
    frames = cat(4,frames,frame);
-
+   
+   frame = zeros([xdim,ydim,1]) + 0.5;
+   
+   
 end 
 end
 
