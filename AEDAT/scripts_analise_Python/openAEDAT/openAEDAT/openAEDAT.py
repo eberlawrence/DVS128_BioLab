@@ -153,7 +153,6 @@ def matrix_active(x=X, y=Y, pol=P, e_ini=0, e_fin=1000, filtro=None, matrixType=
         pass
     return matrix
 
-
 def bounding_boxe(x=X,y=Y, e_ini=0, e_fin=1000, m=0.01):
     gap = e_fin - e_ini
     Hx, Hy = [], []
@@ -171,7 +170,6 @@ def bounding_boxe(x=X,y=Y, e_ini=0, e_fin=1000, m=0.01):
     P2[1] = np.where(Hy > gap*m)[0][-1]
     
     return np.array(P1), np.array(P2)
-
 
 def particula(x=X, y=Y, e_ini=0, e_fin=1000, limiar=30):
     x = X[e_ini:e_fin].copy()
@@ -281,13 +279,15 @@ def create_images(fps=50, t=T, x=X, y=Y, p=P, lim='part'):
         im.imsave('imagens\\img'+str(frame)+'.png', m, cmap='gray')
         image = Image.open('imagens\\img'+str(frame)+'.png')
         draw = ImageDraw.Draw(image)
-
+        # Tracking de objetos:
+        # Por Partículas
         if lim == 'part':
             c, pMax, pMin = particula(e_ini=i, e_fin=f)
             for j in range(len(c)):
                 draw.ellipse([pMin[j][0], pMin[j][1], pMax[j][0],pMax[j][1]], 
                              outline=(0,255,0))
-                             
+
+        # Por Histograma            
         elif lim == 'hist':
             p1, p2 = bounding_boxe(e_ini=i, e_fin=f, m=0.025)
             draw.rectangle([p1[0],p1[1], p2[0], p2[1]], outline=(255,0,0,255))
@@ -298,9 +298,12 @@ def create_images(fps=50, t=T, x=X, y=Y, p=P, lim='part'):
         f += events
         frame += 1
 
-create_images(lim=None)
+
+# Chama a função para criar os frames 
+create_images(lim='hist')
 
 
+# Cria um vídeo no formato .avi juntando todos os frames.
 image_folder = 'imagens'
 video_name = 'imagens\\video.avi'
 images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
