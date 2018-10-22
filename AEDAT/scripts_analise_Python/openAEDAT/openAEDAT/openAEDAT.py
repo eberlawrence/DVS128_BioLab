@@ -107,7 +107,7 @@ def loadaerdat(datafile='path.aedat', length=0, version=V2, debug=1, camera='DVS
 
     return np.array(timestamps), np.array(xaddr), np.array(yaddr), np.array(pol)
 
-T, X, Y, P = loadaerdat('pendulo2.aedat')
+T, X, Y, P = loadaerdat('TrackingCopo.aedat')
 
 def matrix_active(x=X, y=Y, pol=P, e_ini=0, e_fin=1000, filtro=None, matrixType=1):
     '''
@@ -286,7 +286,7 @@ def create_images(fps=50, t=T, x=X, y=Y, p=P, lim='part'):
             c, pMax, pMin = particula(e_ini=i, e_fin=f)
             for j in range(len(c)):
                 draw.ellipse([pMin[j][0], pMin[j][1], pMax[j][0],pMax[j][1]], 
-                             outline=(np.random.choice(255),np.random.choice(255),np.random.choice(255)))
+                             outline=(0,255,0))
                              
         elif lim == 'hist':
             p1, p2 = bounding_boxe(e_ini=i, e_fin=f, m=0.025)
@@ -298,7 +298,7 @@ def create_images(fps=50, t=T, x=X, y=Y, p=P, lim='part'):
         f += events
         frame += 1
 
-create_images()
+create_images(lim=None)
 
 
 image_folder = 'imagens'
